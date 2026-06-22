@@ -1,6 +1,9 @@
 // 1. Capturamos el botón de inicio desde el HTML usando su ID
 const btnStart = document.getElementById('btn-start');
 
+// Cadena con las letras del NIF en el orden oficial del Módulo 23
+const LETRAS_DNI = "TRWAGMYFPDXBNJZSQVHLCKE";
+
 // 2. Escuchamos cuando el usuario hace clic en el botón
 btnStart.addEventListener('click', () => {
     // Ocultamos el botón para cumplir el primer escenario
@@ -14,7 +17,7 @@ btnStart.addEventListener('click', () => {
         numeroDNI = prompt("Introduce el número de tu DNI (entre 0 y 99999999):");
 
         // ESCENARIO: Cancelación del proceso
-        // Si el usuario pulsa 'Cancelar', numeroDNI será null y salimos del bucle inmediatamente
+        
         if (numeroDNI === null) {
             break; 
         }
@@ -36,8 +39,15 @@ btnStart.addEventListener('click', () => {
             alert("El dato introducido es incorrecto: El número es demasiado largo (máximo 8 dígitos).");
 
         } else {
-            // ESCENARIO: DNI válido (Falta añadir el cálculo de la letra real aquí)
-            alert("¡Número correcto! Ahora calcularemos su letra.");
+            // ESCENARIO: DNI válido (Cálculo real de la letra)
+            // Calculamos el resto usando el operador de módulo (%)
+            let resto = numeroConvertido % 23;
+            
+            // Buscamos la letra que corresponde a esa posición
+            let letraCorrespondiente = LETRAS_DNI[resto];
+            
+            // Mostramos el NIF completo al usuario
+            alert(`La letra de tu DNI es la: ${letraCorrespondiente}. Tu NIF completo es: ${numeroConvertido}-${letraCorrespondiente}`);
         }
 
     } while (numeroDNI !== null); // Se repite mientras el usuario no pulse cancelar
