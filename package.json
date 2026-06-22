@@ -1,0 +1,16 @@
+{
+  "name": "kata-dni",
+  "version": "1.0.0",
+  "description": "Calculadora de NIF con validaciones y entorno de pruebas en Vitest",
+  "main": "dni-calculator.js",
+  "scripts": {
+    "test": "vitest --environment jsdom"
+  },
+  "keywords": [],
+  "author": "Andrea",
+  "license": "ISC",
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "vitest": "^3.2.6"
+  }
+}

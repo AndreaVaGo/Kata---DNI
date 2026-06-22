@@ -1,15 +1,17 @@
-const dniInput = document.getElementById('dni-input');
-const btnCalculate = document.getElementById('btn-calculate');
-const resultMessage = document.getElementById('result-message');
 const LETRAS_DNI = "TRWAGMYFPDXBNJZSQVHLCKE";
 
 // 1. Función con la lógica de cálculo y validación
 function procesarDNI() {
+    // Buscamos los elementos dentro de la función para que capturen el DOM del test en tiempo real
+    const dniInput = document.getElementById('dni-input');
+    const resultMessage = document.getElementById('result-message');
+
+    if (!dniInput || !resultMessage) return;
+
     let numeroDNI = dniInput.value; 
     let numeroConvertido = parseInt(numeroDNI);
 
     if (isNaN(numeroConvertido) || numeroConvertido < 0 || numeroConvertido > 99999999) {
-        // Mensaje limpio para que coincida exactamente con las expectativas del test
         resultMessage.textContent = "El dato introducido es incorrecto.";
         resultMessage.style.color = "red";
     } else {
@@ -20,21 +22,30 @@ function procesarDNI() {
     }
 }
 
-// 2. Escuchamos el CLIC en el botón
-if (btnCalculate) {
-    btnCalculate.addEventListener('click', procesarDNI);
+// 2. Función contenedora para inicializar los eventos
+function inicializarCalculadora() {
+    const btnCalculate = document.getElementById('btn-calculate');
+    const dniInput = document.getElementById('dni-input');
+
+    if (btnCalculate) {
+        btnCalculate.addEventListener('click', procesarDNI);
+    }
+
+    if (dniInput) {
+        dniInput.addEventListener('keydown', (event) => {
+            if (event.key === "Enter") {
+                procesarDNI(); 
+            }
+        });
+    }
 }
 
-// 3. Escuchamos la tecla ENTER dentro de la caja de texto
-if (dniInput) {
-    dniInput.addEventListener('keydown', (event) => {
-        if (event.key === "Enter") {
-            procesarDNI(); 
-        }
-    });
+// Si estamos en el navegador, inicializamos automáticamente
+if (typeof window !== 'undefined') {
+    inicializarCalculadora();
 }
 
-// 4. Bloque de exportación obligatorio para Jest (entorno Node.js)
+// 3. Bloque de exportación limpio para Vitest
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { LETRAS_DNI, procesarDNI };
+    module.exports = { LETRAS_DNI, procesarDNI, inicializarCalculadora };
 }
