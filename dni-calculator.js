@@ -1,54 +1,30 @@
-// 1. Capturamos el botón de inicio desde el HTML usando su ID
-const btnStart = document.getElementById('btn-start');
-
-// Cadena con las letras del NIF en el orden oficial del Módulo 23
+const dniInput = document.getElementById('dni-input');
+const btnCalculate = document.getElementById('btn-calculate');
+const resultMessage = document.getElementById('result-message');
 const LETRAS_DNI = "TRWAGMYFPDXBNJZSQVHLCKE";
 
-// 2. Escuchamos cuando el usuario hace clic en el botón
-btnStart.addEventListener('click', () => {
-    // Ocultamos el botón para cumplir el primer escenario
-    btnStart.style.display = 'none';
-    
-    let numeroDNI; 
+// 1. Creamos una función con toda la lógica que ya tenías hecha
+function procesarDNI() {
+    let numeroDNI = dniInput.value; 
+    let numeroConvertido = parseInt(numeroDNI);
 
-    // 3. Iniciamos el bucle para permitir la repetición del proceso
-    do {
-        // Solicitamos el número al usuario
-        numeroDNI = prompt("Introduce el número de tu DNI (entre 0 y 99999999):");
+    if (isNaN(numeroConvertido) || numeroConvertido < 0 || numeroConvertido > 99999999) {
+        resultMessage.textContent = "El dato introducido es incorrecto.";
+        resultMessage.style.color = "red";
+    } else {
+        let resto = numeroConvertido % 23;
+        let letra = LETRAS_DNI[resto];
+        resultMessage.textContent = `Tu NIF es: ${numeroConvertido}-${letra}`;
+        resultMessage.style.color = "green";
+    }
+}
 
-        // ESCENARIO: Cancelación del proceso
-        
-        if (numeroDNI === null) {
-            break; 
-        }
+// 2. Escuchamos el CLIC en el botón
+btnCalculate.addEventListener('click', procesarDNI);
 
-        // Convertimos el texto introducido a un número entero
-        let numeroConvertido = parseInt(numeroDNI);
-
-        // 4. Bloque de validaciones con mensajes específicos personalizados
-        if (isNaN(numeroConvertido)) {
-            // ESCENARIO: Dato no numérico
-            alert("El dato introducido es incorrecto: ¡No has introducido un número!");
-
-        } else if (numeroConvertido < 0) {
-            // ESCENARIO: Número fuera de rango (Negativo)
-            alert("El dato introducido es incorrecto: El número no puede ser negativo.");
-
-        } else if (numeroConvertido > 99999999) {
-            // ESCENARIO: Número fuera de rango (Demasiado largo)
-            alert("El dato introducido es incorrecto: El número es demasiado largo (máximo 8 dígitos).");
-
-        } else {
-            // ESCENARIO: DNI válido (Cálculo real de la letra)
-            // Calculamos el resto usando el operador de módulo (%)
-            let resto = numeroConvertido % 23;
-            
-            // Buscamos la letra que corresponde a esa posición
-            let letraCorrespondiente = LETRAS_DNI[resto];
-            
-            // Mostramos el NIF completo al usuario
-            alert(`La letra de tu DNI es la: ${letraCorrespondiente}. Tu NIF completo es: ${numeroConvertido}-${letraCorrespondiente}`);
-        }
-
-    } while (numeroDNI !== null); // Se repite mientras el usuario no pulse cancelar
+// 3. Escuchamos la tecla ENTER dentro de la caja de texto
+dniInput.addEventListener('keydown', (event) => {
+    if (event.key === "Enter") {
+        procesarDNI(); // Ejecuta la misma lógica
+    }
 });
